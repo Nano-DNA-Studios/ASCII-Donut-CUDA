@@ -15,7 +15,7 @@ __global__ void addKernel(float* c, const float* a, const float* b)
 
 int main()
 {
-	const int arraySize = 1024 * 500;
+	const int arraySize = 1024 * 50;
 	float a[arraySize] = { 0, 0.5f, 1, 1.5f, 2 };
 	float b[arraySize] = { 0, 0.5f, 1, 1.5f, 2 };
 	float c[arraySize] = { 0 };
@@ -31,7 +31,7 @@ int main()
 
 	printf("Starting Kernel");
 
-	for (int i = 0; i < 10000; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		// Add vectors in parallel.
 		cudaError_t cudaStatus = addWithCuda(c, a, b, arraySize);
@@ -109,7 +109,7 @@ cudaError_t addWithCuda(float* c, const float* a, const float* b, unsigned int s
 	}
 
 	// Launch a kernel on the GPU with one thread for each element.
-	addKernel << <500, 1024 >> > (dev_c, dev_a, dev_b);
+	addKernel << <50, 1024 >> > (dev_c, dev_a, dev_b);
 
 	// Check for any errors launching the kernel
 	cudaStatus = cudaGetLastError();
