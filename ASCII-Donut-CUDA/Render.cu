@@ -83,8 +83,6 @@ __global__ void renderKernel(float A, float B, float R1, float R2, float XPos, f
 
 }
 
-
-
 template <typename T>
 cudaError_t AssignMemory(T** variable, int size = 1)
 {
@@ -132,7 +130,7 @@ Error:
 
 cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, char* buffer)
 {
-	float kernel_A = 0;
+	float* kernel_A = 0;
 	float kernel_B = 0;
 	float kernel_R1 = 0;
 	float kernel_R2 = 0;
@@ -149,7 +147,7 @@ cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float 
 	float* dev_c = 0;
 	cudaError_t cudaStatus;
 
-
+	cudaStatus = AssignVariable(&kernel_A, &A);
 
 	//cudaStatus = cudaSetDevice(0);
 	//if (cudaStatus != cudaSuccess)
