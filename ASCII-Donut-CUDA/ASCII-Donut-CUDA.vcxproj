@@ -84,8 +84,10 @@
   <ItemGroup>
     <ClInclude Include="Donut.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Render.cuh" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="Donut.cpp" />
     <ClCompile Include="Light.cpp" />
   </ItemGroup>

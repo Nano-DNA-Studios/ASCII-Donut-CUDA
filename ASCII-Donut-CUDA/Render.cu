@@ -1,86 +1,99 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include <iostream>
+#include <stdio.h>
+#include <math.h>
+#include <Windows.h>
+#include "Light.h"
+#include "Render.cuh"
 
-cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, char* buffer);
+//Add Z Buffer in the future
 
-__global__ void renderKernel(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, char* buffer)
+cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, int width, int height, Light* lightSource);
+
+__device__ float clamp(float n, float lower, float upper) {
+	return max(lower, min(n, upper));
+}
+
+__global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, float* XPosVal, float* YPosVal, float* theta, float* phi, char* buffer, int* width, int* height, Light* light)
 {
-	int index = blockIdx.x * blockDim.x + threadIdx.x;
+	char _luminenceVals[12] = { '.', ',', '-', '~', ':',';', '=','!', '*', '#', '$', '@' };
 
+	int _luminenceValuesLength = 12;
+
+	int thetaIndex = blockIdx.x;
+	int phiIndex = threadIdx.x;
+
+	float A = *AVal;
+	float B = *BVal;
+	float R1 = *R1Val;
+	float R2 = *R2Val;
+	float XPos = *XPosVal;
+	float YPos = *YPosVal;
+	int _width = *width;
+	int _height = *height;
+
+	int sizeOfScreen = _width * _height;
+
+	float K2 = 10;
+	float K1 = _width * K2 * 3 / (24 * (R1 + R2));
 
 	float cosA = cosf(A);
 	float sinA = sinf(A);
 	float cosB = cosf(B);
 	float sinB = sinf(B);
 
+	float cosTheta = cosf(theta[thetaIndex]);
+	float sinTheta = sinf(theta[thetaIndex]);
 
-    /*for (float theta = 0; theta < 2 * pi; theta += thetaStep)
-    {
-        float cosTheta = cos(theta);
-        float sinTheta = sin(theta);
+	float circleX = R2 + R1 * cosTheta;
+	float circleY = R1 * sinTheta;
 
-        float circleX = R2 + R1 * cosTheta;
-        float circleY = R1 * sinTheta;
+	float cosPhi = cosf(phi[phiIndex]);
+	float sinPhi = sinf(phi[phiIndex]);
 
-        for (float phi = 0; phi < 2 * pi; phi += phiStep)
-        {
-            float cosPhi = cos(phi);
-            float sinPhi = sin(phi);
+	float x1 = cosB * cosPhi + sinB * sinA * sinPhi;
+	float x2 = cosA * sinB;
 
-            float x1 = cosB * cosPhi + sinB * sinA * sinPhi;
-            float x2 = cosA * sinB;
+	float y1 = sinB * cosPhi - cosB * sinA * sinPhi;
+	float y2 = cosA * cosB;
 
-            float y1 = sinB * cosPhi - cosB * sinA * sinPhi;
-            float y2 = cosA * cosB;
+	float z1 = cosA * sinPhi;
+	float z2 = sinA;
 
-            float z1 = cosA * sinPhi;
-            float z2 = sinA;
+	float x = XPos + circleX * x1 - circleY * x2;
+	float y = YPos + circleX * y1 + circleY * y2;
+	float z = K2 + circleX * z1 + circleY * z2;
 
-            float x = XPos + circleX * x1 - circleY * x2;
-            float y = YPos + circleX * y1 + circleY * y2;
-            float z = K2 + circleX * z1 + circleY * z2;
+	float ooz = 1 / z;
 
-            float ooz = 1 / z;
+	int xp = (int)(_width / 2 + K1 * ooz * x);
+	int yp = (int)(_height / 2 - K1 * ooz * y);
 
-            int xp = (int)(_width / 2 + K1 * ooz * x);
-            int yp = (int)(_height / 2 - K1 * ooz * y);
+	xp = clamp(xp, 0, _width - 1);
+	yp = clamp(yp, 0, _height - 1);
 
-            xp = clamp(xp, 0, _width - 1);
-            yp = clamp(yp, 0, _height - 1);
+	int idx = xp + yp * _width;
 
-            int idx = xp + yp * _width;
+	float nx = cosTheta;
+	float ny = sinTheta;
 
-            float nx = cosTheta;
-            float ny = sinTheta;
+	float Nx = nx * x1 - ny * x2;
+	float Ny = nx * y1 + ny * y2;
+	float Nz = nx * z1 + ny * z2;
 
-            float Nx = nx * x1 - ny * x2;
-            float Ny = nx * y1 + ny * y2;
-            float Nz = nx * z1 + ny * z2;
+	float mag = sqrtf(Nx * Nx + Ny * Ny + Nz * Nz);
 
-            float mag = sqrtf(Nx * Nx + Ny * Ny + Nz * Nz);
+	Nx = Nx / mag;
+	Ny = Ny / mag;
+	Nz = Nz / mag;
 
-            Nx = Nx / mag;
-            Ny = Ny / mag;
-            Nz = Nz / mag;
+	float Luminence = Nx * light->NormalizedX + Ny * light->NormalizedY + Nz * light->NormalizedZ;
 
-            float Luminence = Nx * LightSource->NormalizedX + Ny * LightSource->NormalizedY + Nz * LightSource->NormalizedZ;
-
-            if (idx > sizeOfScreen || idx < 0)
-                continue;
-
-            if (ooz > zBuffer[idx])
-            {
-                int luminance_index = (int)((Luminence + 1) * (_luminenceValuesLength) / (2) * LightSource->GetIntensity(x, y, z));
-                luminance_index = clamp(luminance_index, 0, _luminenceValuesLength - 1);
-                zBuffer[idx] = ooz;
-                _buf[idx] = _luminenceVals[luminance_index];
-            }
-        }
-    }*/
-
-
-
+	int luminance_index = (int)((Luminence + 1) * (_luminenceValuesLength) / (2) * light->GetIntensity(x, y, z));
+	luminance_index = clamp(luminance_index, 0, _luminenceValuesLength - 1);
+	//zBuffer[idx] = ooz;
+	buffer[idx] = _luminenceVals[luminance_index];
 }
 
 template <typename T>
@@ -100,7 +113,27 @@ Error:
 	// You might want to add clean-up code here if needed
 	cudaFree(variable);
 	return cudaStatus;
+
+
 }
+
+template <typename T>
+/// <summary>
+/// Get the variable from the GPU memory to the CPU memory
+///		</summary>
+cudaError_t GetVariable(T* hostVariable, T* deviceVariable, int size = 1)
+{
+	cudaError_t cudaStatus;
+
+	// Copy data from device to host
+	cudaStatus = cudaMemcpy(hostVariable, deviceVariable, size * sizeof(T), cudaMemcpyDeviceToHost);
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "cudaMemcpy failed!");
+	}
+
+	return cudaStatus;
+}
+
 
 template <typename T>
 cudaError_t AssignVariable(T** variable, T* assignedValue, int size = 1)
@@ -126,130 +159,73 @@ Error:
 	cudaFree(variable);
 	return cudaStatus;
 }
-//Add Z Buffer in the future
 
-cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, char* buffer)
+cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, int width, int height, Light* lightSource)
 {
 	float* kernel_A = 0;
-	float kernel_B = 0;
-	float kernel_R1 = 0;
-	float kernel_R2 = 0;
-	float kernel_XPos = 0;
-	float kernel_YPos = 0;
-
+	float* kernel_B = 0;
+	float* kernel_R1 = 0;
+	float* kernel_R2 = 0;
+	float* kernel_XPos = 0;
+	float* kernel_YPos = 0;
+	int* kernel_width = 0;
+	int* kernel_height = 0;
 	float* kernel_theta = 0;
 	float* kernel_phi = 0;
 	char* kernel_buffer = 0;
+	Light* kernel_light = 0;
 
-
-	float* dev_a = 0;
-	float* dev_b = 0;
-	float* dev_c = 0;
 	cudaError_t cudaStatus;
 
+	cudaStatus = cudaSetDevice(0);
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
+	}
+
+	//Assign all the Variables and Copy to GPU memory
 	cudaStatus = AssignVariable(&kernel_A, &A);
+	cudaStatus = AssignVariable(&kernel_B, &B);
+	cudaStatus = AssignVariable(&kernel_R1, &R1);
+	cudaStatus = AssignVariable(&kernel_R2, &R2);
+	cudaStatus = AssignVariable(&kernel_XPos, &XPos);
+	cudaStatus = AssignVariable(&kernel_YPos, &YPos);
+	cudaStatus = AssignVariable(&kernel_width, &width);
+	cudaStatus = AssignVariable(&kernel_height, &height);
 
-	//cudaStatus = cudaSetDevice(0);
-	//if (cudaStatus != cudaSuccess)
-	//{
-	//	fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
-	//	goto Error;
-	//}
+	cudaStatus = AssignVariable(&kernel_theta, theta, thetaSize);
+	cudaStatus = AssignVariable(&kernel_phi, phi, phiSize);
+	cudaStatus = AssignVariable(&kernel_light, lightSource, 1);
 
-	//cudaStatus = cudaMalloc((void**)&kernel_A, sizeof(float));
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMalloc failed!");
-	//	goto Error;
-	//}
+	cudaStatus = AssignVariable(&kernel_buffer, buffer, bufferSize);
 
-	//cudaStatus = cudaMalloc((void**)&kernel_B, sizeof(float));
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMalloc failed!");
-	//	goto Error;
-	//}
+	render << <thetaSize, phiSize >> > (kernel_A, kernel_B, kernel_R1, kernel_R2, kernel_XPos, kernel_YPos, kernel_theta, kernel_phi, kernel_buffer, kernel_width, kernel_height, kernel_light);
 
-	//cudaStatus = cudaMalloc((void**)&kernel_R1, sizeof(float));
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMalloc failed!");
-	//	goto Error;
-	//}
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "render launch failed: %s\n", cudaGetErrorString(cudaStatus));
+		//goto Error;
+	}
 
-	//cudaStatus = cudaMalloc((void**)&kernel_R2, sizeof(float));
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMalloc failed!");
-	//	goto Error;
-	//}
+	cudaStatus = cudaDeviceSynchronize();
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
+		//goto Error;
+	}
 
+	// Copy the Result of the buffer on the GPU to the buffer on the CPU
+	cudaStatus = GetVariable(buffer, kernel_buffer, bufferSize);
 
-
-	//// Choose which GPU to run on, change this on a multi-GPU system.
-	//cudaStatus = cudaSetDevice(0);
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
-	//	goto Error;
-	//}
-
-	//// Allocate GPU buffers for three vectors (two input, one output).
-	//cudaStatus = cudaMalloc((void**)&dev_c, size * sizeof(float));
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMalloc failed!");
-	//	goto Error;
-	//}
-
-	//cudaStatus = cudaMalloc((void**)&dev_a, size * sizeof(float));
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMalloc failed!");
-	//	goto Error;
-	//}
-
-	//cudaStatus = cudaMalloc((void**)&dev_b, size * sizeof(float));
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMalloc failed!");
-	//	goto Error;
-	//}
-
-	//// Copy input vectors from host memory to GPU buffers.
-	//cudaStatus = cudaMemcpy(dev_a, a, size * sizeof(float), cudaMemcpyHostToDevice);
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMemcpy failed!");
-	//	goto Error;
-	//}
-
-	//cudaStatus = cudaMemcpy(dev_b, b, size * sizeof(float), cudaMemcpyHostToDevice);
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMemcpy failed!");
-	//	goto Error;
-	//}
-
-	//// Launch a kernel on the GPU with one thread for each element.
-	////addKernel << <50, 1024 >> > (dev_c, dev_a, dev_b);
-
-	//// Check for any errors launching the kernel
-	//cudaStatus = cudaGetLastError();
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
-	//	goto Error;
-	//}
-
-	//// cudaDeviceSynchronize waits for the kernel to finish, and returns
-	//// any errors encountered during the launch.
-	//cudaStatus = cudaDeviceSynchronize();
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
-	//	goto Error;
-	//}
-
-	//// Copy output vector from GPU buffer to host memory.
-	//cudaStatus = cudaMemcpy(c, dev_c, size * sizeof(float), cudaMemcpyDeviceToHost);
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMemcpy failed!");
-	//	goto Error;
-	//}
-
-Error:
-	cudaFree(dev_c);
-	cudaFree(dev_a);
-	cudaFree(dev_b);
+	//Free the Memory to be safe
+	cudaFree(kernel_A);
+	cudaFree(kernel_B);
+	cudaFree(kernel_R1);
+	cudaFree(kernel_R2);
+	cudaFree(kernel_XPos);
+	cudaFree(kernel_YPos);
+	cudaFree(kernel_width);
+	cudaFree(kernel_height);
+	cudaFree(kernel_theta);
+	cudaFree(kernel_phi);
+	cudaFree(kernel_buffer);
 
 	return cudaStatus;
 }

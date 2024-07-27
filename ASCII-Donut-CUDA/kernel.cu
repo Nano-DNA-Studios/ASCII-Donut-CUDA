@@ -12,55 +12,6 @@ __global__ void addKernel(float* c, const float* a, const float* b)
 	c[i] = cosf(a[i]) + sinf(b[i]);
 
 }
-
-int main()
-{
-	const int arraySize = 1024 * 50;
-	float a[arraySize] = { 0, 0.5f, 1, 1.5f, 2 };
-	float b[arraySize] = { 0, 0.5f, 1, 1.5f, 2 };
-	float c[arraySize] = { 0 };
-
-
-	float x = 0;
-	for (int i = 0; i < arraySize; i++)
-	{
-		a[i] = x;
-		b[i] = x;
-		x = x + 0.01;
-	}
-
-	printf("Starting Kernel");
-
-	for (int i = 0; i < 100; i++)
-	{
-		// Add vectors in parallel.
-		cudaError_t cudaStatus = addWithCuda(c, a, b, arraySize);
-		if (cudaStatus != cudaSuccess) {
-			fprintf(stderr, "addWithCuda failed!");
-			return 1;
-		}
-	}
-
-
-
-	printf("Finished Kernel");
-
-	for (int i = 0; i < arraySize; i++)
-	{
-		//printf(" i = %i --> c = %f\n", i, c[i]);
-	}
-
-	// cudaDeviceReset must be called before exiting in order for profiling and
-	// tracing tools such as Nsight and Visual Profiler to show complete traces.
-	/*cudaStatus = cudaDeviceReset();
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaDeviceReset failed!");
-		return 1;
-	}*/
-
-	return 0;
-}
-
 template <typename T>
 cudaError_t AssignMemory(T** variable, int size = 1)
 {
@@ -104,6 +55,7 @@ Error:
 	cudaFree(variable);
 	return cudaStatus;
 }
+
 
 // Helper function for using CUDA to add vectors in parallel.
 cudaError_t addWithCuda(float* c,  float* a,  float* b, unsigned int size)

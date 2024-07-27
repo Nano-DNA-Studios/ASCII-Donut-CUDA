@@ -1,6 +1,8 @@
 #pragma once
 
 #include <algorithm>
+#include <cmath>
+#include <crt/host_defines.h>
 
 
 class Light
@@ -20,7 +22,7 @@ private:
 	const float pi = 3.141f;
 
 public:
-	Light(float x, float y, float z, int strength) : X(x), Y(y), Z(z), Strength(strength)
+	__host__ __device__ Light(float x, float y, float z, int strength) : X(x), Y(y), Z(z), Strength(strength)
 	{
 		Magnitude = sqrtf(X * X + Y * Y + Z * Z);
 		NormalizedX = Magnitude > 0 ? X / Magnitude : X;
@@ -35,7 +37,7 @@ public:
 		/// <param name="oy"> Objects Y Position </param>
 		/// <param name="oz"> Objects Z Position </param>
 		/// <returns> The Intensity Value at a point on an object. </returns>
-	float GetIntensity(float ox, float oy, float oz)
+	__host__ __device__ float GetIntensity(float ox, float oy, float oz)
 	{
 		float rx = ox - X;
 		float ry = oy - Y;
@@ -46,7 +48,7 @@ public:
 		return r > 0 ? (float)Strength / (4 * pi * r) : (float)Strength / (4 * pi);
 	}
 
-	void UpdatePosition(float x, float y, float z)
+	__host__ __device__ void UpdatePosition(float x, float y, float z)
 	{
 		X = x;
 		Y = y;
@@ -57,7 +59,7 @@ public:
 		NormalizedZ = Magnitude > 0 ? Z / Magnitude : Z;
 	}
 
-	void UpdateStrength(float strength)
+	__host__ __device__ void UpdateStrength(float strength)
 	{
 		Strength = strength;
 	}
