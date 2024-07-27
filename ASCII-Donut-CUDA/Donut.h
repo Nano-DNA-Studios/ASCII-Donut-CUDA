@@ -31,9 +31,9 @@ public:
 
 	float ZPos = 0;
 
-	float thetaStep = 0.02f;
+	float thetaStep = 0.012f;
 
-	float phiStep = 0.03f;
+	float phiStep = 0.012f;
 
 	float R1 = 1;
 
@@ -198,7 +198,7 @@ public:
 			}
 		}
 
-		CenterDisplay();
+		FastDisplay();
 	}
 
 	void FastDisplay()

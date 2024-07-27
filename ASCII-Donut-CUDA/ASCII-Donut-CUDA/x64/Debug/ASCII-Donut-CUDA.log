@@ -3,38 +3,38 @@
 D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Light.h(64,14): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'App.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(121,14): warning C4244: '=': conversion from '_Rep' to 'int', possible loss of data
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(121,14): warning C4244:         with
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(121,14): warning C4244:         [
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(121,14): warning C4244:             _Rep=double
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(121,14): warning C4244:         ]
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(118,14): warning C4244: '=': conversion from '_Rep' to 'int', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(118,14): warning C4244:         with
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(118,14): warning C4244:         [
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(118,14): warning C4244:             _Rep=double
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(118,14): warning C4244:         ]
   (compiling source file 'App.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(172,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(168,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'App.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(172,16): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(168,16): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'App.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(172,15): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(168,15): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'App.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(173,31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(169,31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'App.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(173,16): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(169,16): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'App.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(173,15): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(169,15): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'App.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(198,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(194,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'App.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(198,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(194,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'App.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(198,29): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(194,29): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'App.cpp')
   
   Donut.cpp
@@ -42,38 +42,38 @@ D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(198,29)
 D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Light.h(64,14): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'Donut.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(121,14): warning C4244: '=': conversion from '_Rep' to 'int', possible loss of data
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(121,14): warning C4244:         with
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(121,14): warning C4244:         [
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(121,14): warning C4244:             _Rep=double
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(121,14): warning C4244:         ]
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(118,14): warning C4244: '=': conversion from '_Rep' to 'int', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(118,14): warning C4244:         with
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(118,14): warning C4244:         [
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(118,14): warning C4244:             _Rep=double
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(118,14): warning C4244:         ]
   (compiling source file 'Donut.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(172,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(168,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'Donut.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(172,16): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(168,16): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'Donut.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(172,15): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(168,15): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'Donut.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(173,31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(169,31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'Donut.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(173,16): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(169,16): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'Donut.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(173,15): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(169,15): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'Donut.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(198,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(194,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'Donut.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(198,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(194,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'Donut.cpp')
   
-D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(198,29): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\NanoDNA Studios\Programming\ASCII-Donut-CUDA\ASCII-Donut-CUDA\Donut.h(194,29): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   (compiling source file 'Donut.cpp')
   
   Generating Code...
