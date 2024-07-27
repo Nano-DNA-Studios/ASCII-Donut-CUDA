@@ -6,6 +6,11 @@
 #include "Light.h"
 #include <cuda_runtime.h>
 #include "Render.cuh"
+#include <chrono>
+#include <iostream>
+#include <string>
+#include <windows.h>
+#include <chrono>
 
 class Donut
 {
@@ -13,6 +18,9 @@ class Donut
 #pragma region Properties
 
 public:
+
+
+	 std::chrono::steady_clock::time_point lastFrameTime = std::chrono::high_resolution_clock::now();
 
 	float A;
 
@@ -100,6 +108,9 @@ public:
 		std::fill(_buf, _buf + sizeOfScreen, ' ');
 
 		RenderDonut(A, B, R1, R2, XPos, YPos, theta, phi, points, points, _buf, sizeOfScreen, _width, _height, LightSource);
+
+		//FastDisplay();
+		Display3();
 	}
 
 	void drawDonut()
@@ -110,9 +121,6 @@ public:
 
 		std::fill(zBuffer, zBuffer + sizeOfScreen, 0.0f);
 		std::fill(_buf, _buf + sizeOfScreen, ' ');
-
-		printf("%d", A);
-		printf("%d", B);
 
 		float cosA = cos(A);
 		float sinA = sin(A);
@@ -186,6 +194,119 @@ public:
 		Display();
 	}
 
+	void Display3()
+	{
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+		GetConsoleScreenBufferInfo(hConsole, &csbi);
+
+		int height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+		int width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+
+		if (height != _lastHeight || width != _lastWidth) {
+			// Efficiently clear the screen by filling the console with spaces
+			COORD topLeft = { 0, 0 };
+			SetConsoleCursorPosition(hConsole, topLeft);
+			for (int i = 0; i < _lastHeight * _lastWidth; ++i) std::cout << ' ';
+			SetConsoleCursorPosition(hConsole, topLeft);
+		}
+
+		std::string buffer;
+		buffer.reserve(_height * _width + _height + 20); // Add space for the FPS text
+
+		// Calculate FPS
+		auto now = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(now - lastFrameTime);
+		lastFrameTime = now;
+		double fps = 1.0 / duration.count();
+
+		// Format FPS information
+		buffer += "FPS: " + std::to_string(static_cast<int>(fps)) + "\n";
+
+		for (int y = 0; y < _height; y++) {
+			for (int x = 0; x < _width; x++) {
+				int index = y * _width + x;
+				buffer += _buf[index];
+			}
+			buffer += "\n"; // Add a newline for each row
+		}
+
+		std::cout << buffer;
+
+		_lastHeight = _height;
+		_lastWidth = _lastWidth;
+	}
+
+	void Display2()
+	{
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+		GetConsoleScreenBufferInfo(hConsole, &csbi);
+
+		int height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+		int width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+
+		if (height != _lastHeight || width != _lastWidth) {
+			// Efficiently clear the screen by filling the console with spaces
+			COORD topLeft = { 0, 0 };
+			SetConsoleCursorPosition(hConsole, topLeft);
+			for (int i = 0; i < _lastHeight * _lastWidth; ++i) std::cout << ' ';
+			SetConsoleCursorPosition(hConsole, topLeft);
+		}
+
+		std::string buffer;
+		buffer.reserve(_height * _width + _height); // Account for new lines
+
+		for (int y = 0; y < _height; y++) {
+			if (y > 0) buffer += "\n"; // Add a newline for each new row except the first
+			for (int x = 0; x < _width; x++) {
+				int index = y * _width + x;
+				buffer += _buf[index];
+			}
+		}
+
+		std::cout << buffer;
+
+		_lastHeight = _height;
+		_lastWidth = _width;
+	}
+
+
+	void FastDisplay()
+	{
+		// Get the console handle
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		// Retrieve screen buffer information
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+		GetConsoleScreenBufferInfo(hConsole, &csbi);
+
+		int height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+		int width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+
+		// Check if the size has changed
+		if (height != _lastHeight || width != _lastWidth) {
+			system("cls");  // Clear the console
+		}
+
+		int startX = (width - _width) / 2;
+		int startY = (height - _height) / 2;
+
+		for (int y = 0; y < _height; y++) {
+			for (int x = 0; x < _width; x++) {
+				int index = y * _width + x;
+				// Set cursor position
+				COORD pos = { static_cast<SHORT>(startX + x), static_cast<SHORT>(startY + y) };
+				SetConsoleCursorPosition(hConsole, pos);
+				// Write to console
+				std::cout << _buf[index];
+			}
+		}
+
+		_lastHeight = _height;
+		_lastWidth = _width;
+
+	}
 
 	void Display()
 	{

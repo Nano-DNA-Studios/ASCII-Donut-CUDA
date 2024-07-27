@@ -8,17 +8,17 @@ int main()
 {
 	int nDevices;
 	cudaGetDeviceCount(&nDevices);
-	for (int i = 0; i < nDevices; i++) {
-		cudaDeviceProp prop;
-		cudaGetDeviceProperties(&prop, i);
-		std::cout << "Device Number: " << i << std::endl;
-		std::cout << "  Device name: " << prop.name << std::endl;
-		std::cout << "  Multiprocessors: " << prop.multiProcessorCount << std::endl;
-		std::cout << "  Max threads per multiprocessor: " << prop.maxThreadsPerMultiProcessor << std::endl;
-		std::cout << "  Max threads per block: " << prop.maxThreadsPerBlock << std::endl;
-		std::cout << "  Max block dimensions: [" << prop.maxThreadsDim[0] << ", " << prop.maxThreadsDim[1] << ", " << prop.maxThreadsDim[2] << "]" << std::endl;
-		std::cout << "  Max grid dimensions: [" << prop.maxGridSize[0] << ", " << prop.maxGridSize[1] << ", " << prop.maxGridSize[2] << "]" << std::endl;
-	}
+	//for (int i = 0; i < nDevices; i++) {
+	//	cudaDeviceProp prop;
+	//	cudaGetDeviceProperties(&prop, i);
+	//	std::cout << "Device Number: " << i << std::endl;
+	//	std::cout << "  Device name: " << prop.name << std::endl;
+	//	std::cout << "  Multiprocessors: " << prop.multiProcessorCount << std::endl;
+	//	std::cout << "  Max threads per multiprocessor: " << prop.maxThreadsPerMultiProcessor << std::endl;
+	//	std::cout << "  Max threads per block: " << prop.maxThreadsPerBlock << std::endl;
+	//	std::cout << "  Max block dimensions: [" << prop.maxThreadsDim[0] << ", " << prop.maxThreadsDim[1] << ", " << prop.maxThreadsDim[2] << "]" << std::endl;
+	//	std::cout << "  Max grid dimensions: [" << prop.maxGridSize[0] << ", " << prop.maxGridSize[1] << ", " << prop.maxGridSize[2] << "]" << std::endl;
+	//}
 
 	std::cout << "Resize your console, once you're ready input (Y) : ";
 
@@ -27,6 +27,8 @@ int main()
 	std::cin >> reply;
 
 	reply = tolower(reply);
+
+	system("cls");
 
 	if (reply == 'y')
 	{
@@ -39,8 +41,8 @@ int main()
 
 		while (true)
 		{
-			donut->A += 0.2f;
-			donut->B += 0.2f;
+			donut->A += 0.002f;
+			donut->B += 0.002f;
 			donut->Render();
 		}
 	}
