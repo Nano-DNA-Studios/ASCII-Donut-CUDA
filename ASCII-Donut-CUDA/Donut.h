@@ -106,11 +106,14 @@ public:
 
 		int sizeOfScreen = _width * _height;
 
+		float* zBuffer = new float[sizeOfScreen];
+
+		std::fill(zBuffer, zBuffer + sizeOfScreen, 0.0f);
 		std::fill(_buf, _buf + sizeOfScreen, ' ');
 
 		auto before = std::chrono::high_resolution_clock::now();
 
-		RenderDonut(A, B, R1, R2, XPos, YPos, theta, phi, points, points, _buf, sizeOfScreen, _width, _height, LightSource);
+		RenderDonut(A, B, R1, R2, XPos, YPos, theta, phi, points, points, _buf, sizeOfScreen, zBuffer, _width, _height, LightSource);
 
 		auto after = std::chrono::high_resolution_clock::now();
 
@@ -229,7 +232,7 @@ public:
 
 		// Format FPS information
 		buffer += "Terminal FPS: " + std::to_string(static_cast<int>(fps)) + "\n";
-		buffer += "GPU FPS: " + std::to_string(static_cast<int>(fps)) + "\n";
+		buffer += "GPU FPS: " + std::to_string(static_cast<int>(GPUFPS)) + "\n";
 
 		for (int y = 0; y < _height; y++) {
 			for (int x = 0; x < _width; x++) {

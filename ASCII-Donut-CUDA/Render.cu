@@ -6,16 +6,35 @@
 #include <Windows.h>
 #include "Light.h"
 #include "Render.cuh"
+#include <math_functions.h>
+#include <device_atomic_functions.h>  // For atomic functions
+#include <device_functions.h>         // For device intrinsic functions
 
+//extern "C" __declspec(dllimport) cudaError_t static AssignMemory(T * *variable, int size = 1)
+
+ 
 //Add Z Buffer in the future
 
-cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, int width, int height, Light* lightSource);
+cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, float* zBuffer, int width, int height, Light* lightSource);
 
 __device__ float clamp(float n, float lower, float upper) {
 	return max(lower, min(n, upper));
 }
 
-__global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, float* XPosVal, float* YPosVal, float* theta, float* phi, char* buffer, int* width, int* height, Light* light)
+// Helper function to perform atomicMax on floating point values in CUDA
+__device__ bool atomicMaxFloat(float* address, float val)
+{
+	int* address_as_int = (int*)address;
+	int old = *address_as_int;
+	int assumed;
+	do {
+		assumed = old;
+		old = atomicCAS(address_as_int, assumed, __float_as_int(fmaxf(val, __int_as_float(assumed))));
+	} while (assumed != old);
+	return __int_as_float(old) < val;
+}
+
+__global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, float* XPosVal, float* YPosVal, float* theta, float* phi, char* buffer, float* zBuffer, int* width, int* height, Light* light)
 {
 	char _luminenceVals[12] = { '.', ',', '-', '~', ':',';', '=','!', '*', '#', '$', '@' };
 
@@ -90,14 +109,18 @@ __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, flo
 
 	float Luminence = Nx * light->NormalizedX + Ny * light->NormalizedY + Nz * light->NormalizedZ;
 
-	int luminance_index = (int)((Luminence + 1) * (_luminenceValuesLength) / (2) * light->GetIntensity(x, y, z));
-	luminance_index = clamp(luminance_index, 0, _luminenceValuesLength - 1);
-	//zBuffer[idx] = ooz;
-	buffer[idx] = _luminenceVals[luminance_index];
+	if (atomicMaxFloat(&zBuffer[idx], ooz))
+	{
+		Luminence = Nx * light->NormalizedX + Ny * light->NormalizedY + Nz * light->NormalizedZ;
+		int luminance_index = (int)((Luminence + 1) * (_luminenceValuesLength / 2) * light->GetIntensity(x, y, z));
+		luminance_index = clamp(luminance_index, 0, _luminenceValuesLength - 1);
+
+		buffer[idx] = _luminenceVals[luminance_index];
+	}
 }
 
 template <typename T>
-cudaError_t AssignMemory(T** variable, int size = 1)
+cudaError_t static AssignMemory(T** variable, int size = 1)
 {
 	cudaError_t cudaStatus;
 	// Allocate memory for the type T, not just float
@@ -113,15 +136,13 @@ Error:
 	// You might want to add clean-up code here if needed
 	cudaFree(variable);
 	return cudaStatus;
-
-
 }
 
 template <typename T>
 /// <summary>
 /// Get the variable from the GPU memory to the CPU memory
-///		</summary>
-cudaError_t GetVariable(T* hostVariable, T* deviceVariable, int size = 1)
+/// </summary>
+cudaError_t static GetVariable(T* hostVariable, T* deviceVariable, int size = 1)
 {
 	cudaError_t cudaStatus;
 
@@ -136,7 +157,7 @@ cudaError_t GetVariable(T* hostVariable, T* deviceVariable, int size = 1)
 
 
 template <typename T>
-cudaError_t AssignVariable(T** variable, T* assignedValue, int size = 1)
+cudaError_t static AssignVariable(T** variable, T* assignedValue, int size = 1)
 {
 	cudaError_t cudaStatus;
 	// Allocate memory for the type T, not just float
@@ -160,7 +181,7 @@ Error:
 	return cudaStatus;
 }
 
-cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, int width, int height, Light* lightSource)
+cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, float* zBuffer, int width, int height, Light* lightSource)
 {
 	float* kernel_A = 0;
 	float* kernel_B = 0;
@@ -173,6 +194,7 @@ cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float 
 	float* kernel_theta = 0;
 	float* kernel_phi = 0;
 	char* kernel_buffer = 0;
+	float* kernel_zBuffer = 0;
 	Light* kernel_light = 0;
 
 	cudaError_t cudaStatus;
@@ -197,8 +219,9 @@ cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float 
 	cudaStatus = AssignVariable(&kernel_light, lightSource, 1);
 
 	cudaStatus = AssignVariable(&kernel_buffer, buffer, bufferSize);
+	cudaStatus = AssignVariable(&kernel_zBuffer, zBuffer, bufferSize);
 
-	render << <thetaSize, phiSize >> > (kernel_A, kernel_B, kernel_R1, kernel_R2, kernel_XPos, kernel_YPos, kernel_theta, kernel_phi, kernel_buffer, kernel_width, kernel_height, kernel_light);
+	render << <thetaSize, phiSize >> > (kernel_A, kernel_B, kernel_R1, kernel_R2, kernel_XPos, kernel_YPos, kernel_theta, kernel_phi, kernel_buffer, kernel_zBuffer, kernel_width, kernel_height, kernel_light);
 
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "render launch failed: %s\n", cudaGetErrorString(cudaStatus));
