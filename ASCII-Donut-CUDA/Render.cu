@@ -155,7 +155,6 @@ cudaError_t static GetVariable(T* hostVariable, T* deviceVariable, int size = 1)
 	return cudaStatus;
 }
 
-
 template <typename T>
 cudaError_t static AssignVariable(T** variable, T* assignedValue, int size = 1)
 {
