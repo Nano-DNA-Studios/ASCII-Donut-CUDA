@@ -1,29 +1,29 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\",
+  "WorkspaceRootPath": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cu||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cu||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|solutionrelative:Render.cu||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\App.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\App.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|solutionrelative:App.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Donut.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Donut.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|solutionrelative:Donut.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cuh||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cuh||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|solutionrelative:Render.cuh||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Light.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Light.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|solutionrelative:Light.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\kernel.cu||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "AbsoluteMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\kernel.cu||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{B9BD9993-FA2F-492C-B122-9A32DB45BC75}|ASCII-Donut-CUDA.vcxproj|solutionrelative:kernel.cu||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
@@ -40,22 +40,21 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "App.cpp",
-              "DocumentMoniker": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\App.cpp",
+              "DocumentMoniker": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\App.cpp",
               "RelativeDocumentMoniker": "App.cpp",
-              "ToolTip": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\App.cpp",
+              "ToolTip": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\App.cpp",
               "RelativeToolTip": "App.cpp",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-27T02:56:59.21Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-27T02:56:59.21Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "Light.h",
-              "DocumentMoniker": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Light.h",
+              "DocumentMoniker": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Light.h",
               "RelativeDocumentMoniker": "Light.h",
-              "ToolTip": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Light.h",
+              "ToolTip": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Light.h",
               "RelativeToolTip": "Light.h",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
@@ -65,9 +64,9 @@
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "kernel.cu",
-              "DocumentMoniker": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\kernel.cu",
+              "DocumentMoniker": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\kernel.cu",
               "RelativeDocumentMoniker": "kernel.cu",
-              "ToolTip": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\kernel.cu",
+              "ToolTip": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\kernel.cu",
               "RelativeToolTip": "kernel.cu",
               "ViewState": "AQIAADAAAAAAAAAAAAAAAJgAAABRAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
@@ -77,11 +76,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Render.cu",
-              "DocumentMoniker": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cu",
+              "DocumentMoniker": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cu",
               "RelativeDocumentMoniker": "Render.cu",
-              "ToolTip": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cu",
+              "ToolTip": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cu",
               "RelativeToolTip": "Render.cu",
-              "ViewState": "AQIAAJMAAAAAAAAAAAAmwLMAAAAUAAAA",
+              "ViewState": "AQIAAJMAAAAAAAAAAAAmwJ4AAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-07-28T02:27:48.786Z",
               "EditorCaption": ""
@@ -90,22 +89,21 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Donut.h",
-              "DocumentMoniker": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Donut.h",
+              "DocumentMoniker": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Donut.h",
               "RelativeDocumentMoniker": "Donut.h",
-              "ToolTip": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Donut.h",
+              "ToolTip": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Donut.h",
               "RelativeToolTip": "Donut.h",
               "ViewState": "AQIAADkAAAAAAAAAAAAAABsAAAALAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-07-27T02:13:20.487Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-27T02:13:20.487Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "Render.cuh",
-              "DocumentMoniker": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cuh",
+              "DocumentMoniker": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cuh",
               "RelativeDocumentMoniker": "Render.cuh",
-              "ToolTip": "D:\\NanoDNA Studios\\Programming\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cuh",
+              "ToolTip": "C:\\Users\\alexe\\Desktop\\Programming Projects\\ASCII-Donut-CUDA\\ASCII-Donut-CUDA\\Render.cuh",
               "RelativeToolTip": "Render.cuh",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",

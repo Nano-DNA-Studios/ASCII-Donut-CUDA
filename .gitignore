@@ -7,3 +7,42 @@
 *.vsidx
 *.opendb
 *.db
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+
+/ASCII-Donut-CUDA/.vs
+/ASCII-Donut-CUDA/.vs
+/ASCII-Donut-CUDA/ASCII-Donut-CUDA/x64
+/ASCII-Donut-CUDA/x64
