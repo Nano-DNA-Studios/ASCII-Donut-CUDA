@@ -1,7 +1,6 @@
 #ifndef MEMORY_MANAGE_H
 #define MEMORY_MANAGE_H
 
-
 #pragma once
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"

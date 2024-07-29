@@ -121,6 +121,11 @@ public:
 		GPUFPS = 1 / duration.count();
 
 		FastDisplay();
+
+		delete[] theta;
+		delete[] phi;
+		delete[] zBuffer;
+
 	}
 
 	void drawDonut()
@@ -202,6 +207,8 @@ public:
 		}
 
 		FastDisplay();
+
+		delete[] zBuffer;
 	}
 
 	void FastDisplay()

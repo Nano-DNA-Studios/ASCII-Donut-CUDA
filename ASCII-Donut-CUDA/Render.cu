@@ -178,6 +178,8 @@ cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float 
 	cudaFree(kernel_theta);
 	cudaFree(kernel_phi);
 	cudaFree(kernel_buffer);
+	cudaFree(kernel_zBuffer);
+	cudaFree(kernel_light);
 
 	return cudaStatus;
 }
