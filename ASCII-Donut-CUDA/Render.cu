@@ -9,11 +9,7 @@
 #include <math_functions.h>
 #include <device_atomic_functions.h>  // For atomic functions
 #include <device_functions.h>         // For device intrinsic functions
-
-//extern "C" __declspec(dllimport) cudaError_t static AssignMemory(T * *variable, int size = 1)
-
- 
-//Add Z Buffer in the future
+#include "MemoryManagement.cpp"
 
 cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, float* zBuffer, int width, int height, Light* lightSource);
 
@@ -119,66 +115,7 @@ __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, flo
 	}
 }
 
-template <typename T>
-cudaError_t static AssignMemory(T** variable, int size = 1)
-{
-	cudaError_t cudaStatus;
-	// Allocate memory for the type T, not just float
-	cudaStatus = cudaMalloc((void**)variable, size * sizeof(T));
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMalloc failed!");
-		goto Error;
-	}
 
-	return cudaStatus;
-
-Error:
-	// You might want to add clean-up code here if needed
-	cudaFree(variable);
-	return cudaStatus;
-}
-
-template <typename T>
-/// <summary>
-/// Get the variable from the GPU memory to the CPU memory
-/// </summary>
-cudaError_t static GetVariable(T* hostVariable, T* deviceVariable, int size = 1)
-{
-	cudaError_t cudaStatus;
-
-	// Copy data from device to host
-	cudaStatus = cudaMemcpy(hostVariable, deviceVariable, size * sizeof(T), cudaMemcpyDeviceToHost);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMemcpy failed!");
-	}
-
-	return cudaStatus;
-}
-
-template <typename T>
-cudaError_t static AssignVariable(T** variable, T* assignedValue, int size = 1)
-{
-	cudaError_t cudaStatus;
-	// Allocate memory for the type T, not just float
-	cudaStatus = cudaMalloc((void**)variable, size * sizeof(T));
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMalloc failed!");
-		goto Error;
-	}
-
-	cudaStatus = cudaMemcpy(*variable, assignedValue, size * sizeof(T), cudaMemcpyHostToDevice);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMemcpy failed!");
-		goto Error;
-	}
-
-	return cudaStatus;
-
-Error:
-	// You might want to add clean-up code here if needed
-	cudaFree(variable);
-	return cudaStatus;
-}
 
 cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, float* zBuffer, int width, int height, Light* lightSource)
 {

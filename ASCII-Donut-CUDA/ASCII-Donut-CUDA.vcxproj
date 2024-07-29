@@ -89,12 +89,14 @@
   <ItemGroup>
     <ClInclude Include="Donut.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="MemoryManagement.h" />
     <ClInclude Include="Render.cuh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Donut.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="MemoryManagement.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

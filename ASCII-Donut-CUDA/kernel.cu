@@ -2,6 +2,7 @@
 #include "device_launch_parameters.h"
 #include <stdio.h>
 #include <math.h>
+#include "MemoryManagement.cpp"
 
 cudaError_t addWithCuda(float* c, float* a, float* b, unsigned int size);
 
@@ -12,50 +13,6 @@ __global__ void addKernel(float* c, const float* a, const float* b)
 	c[i] = cosf(a[i]) + sinf(b[i]);
 
 }
-template <typename T>
-cudaError_t AssignMemory(T** variable, int size = 1)
-{
-	cudaError_t cudaStatus;
-	// Allocate memory for the type T, not just float
-	cudaStatus = cudaMalloc((void**)variable, size * sizeof(T));
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMalloc failed!");
-		goto Error;
-	}
-
-	return cudaStatus;
-
-Error:
-	// You might want to add clean-up code here if needed
-	cudaFree(variable);
-	return cudaStatus;
-}
-
-template <typename T>
-cudaError_t AssignVariable(T** variable, T* assignedValue, int size = 1)
-{
-	cudaError_t cudaStatus;
-	// Allocate memory for the type T, not just float
-	cudaStatus = cudaMalloc((void**)variable, size * sizeof(T));
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMalloc failed!");
-		goto Error;
-	}
-
-	cudaStatus = cudaMemcpy(*variable, assignedValue, size * sizeof(T), cudaMemcpyHostToDevice);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMemcpy failed!");
-		goto Error;
-	}
-
-	return cudaStatus;
-
-Error:
-	// You might want to add clean-up code here if needed
-	cudaFree(variable);
-	return cudaStatus;
-}
-
 
 // Helper function for using CUDA to add vectors in parallel.
 cudaError_t addWithCuda(float* c,  float* a,  float* b, unsigned int size)
@@ -72,17 +29,6 @@ cudaError_t addWithCuda(float* c,  float* a,  float* b, unsigned int size)
 		goto Error;
 	}
 
-
-	/*cudaStatus = AssignMemory(&dev_c, size);
-
-	float* aCopy = (float*)a;
-
-	cudaStatus = AssignVariable(&dev_a, aCopy, size);
-
-	float* bCopy = (float*)b;
-
-	cudaStatus = AssignVariable(&dev_b, bCopy, size);*/
-
 	// Allocate memory for dev_c, dev_a, dev_b
 	cudaStatus = AssignMemory(&dev_c, size);
 	if (cudaStatus != cudaSuccess) {
@@ -98,38 +44,6 @@ cudaError_t addWithCuda(float* c,  float* a,  float* b, unsigned int size)
 	if (cudaStatus != cudaSuccess) {
 		goto Error;
 	}
-
-	//// Allocate GPU buffers for three vectors (two input, one output).
-	//cudaStatus = cudaMalloc((void**)&dev_c, size * sizeof(float));
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMalloc failed!");
-	//	goto Error;
-	//}
-
-	//cudaStatus = cudaMalloc((void**)&dev_a, size * sizeof(float));
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMalloc failed!");
-	//	goto Error;
-	//}
-
-	//cudaStatus = cudaMalloc((void**)&dev_b, size * sizeof(float));
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMalloc failed!");
-	//	goto Error;
-	//}
-
-	//// Copy input vectors from host memory to GPU buffers.
-	//cudaStatus = cudaMemcpy(dev_a, a, size * sizeof(float), cudaMemcpyHostToDevice);
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMemcpy failed!");
-	//	goto Error;
-	//}
-
-	//cudaStatus = cudaMemcpy(dev_b, b, size * sizeof(float), cudaMemcpyHostToDevice);
-	//if (cudaStatus != cudaSuccess) {
-	//	fprintf(stderr, "cudaMemcpy failed!");
-	//	goto Error;
-	//}
 
 	// Launch a kernel on the GPU with one thread for each element.
 	addKernel << <50, 1024 >> > (dev_c, dev_a, dev_b);
