@@ -83,7 +83,6 @@
     </CudaLink>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="kernel.cu" />
     <CudaCompile Include="Render.cu" />
   </ItemGroup>
   <ItemGroup>

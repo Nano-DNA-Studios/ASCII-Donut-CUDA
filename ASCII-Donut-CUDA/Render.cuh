@@ -4,10 +4,10 @@
 // CUDA Runtime
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
-
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
+#include "Light.h"
 
 // Forward declaration of any kernels and device/host functions
 __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, float* XPosVal, float* YPosVal, float* theta, float* phi, char* buffer, float* zBuffer, int* width, int* height, Light* light);

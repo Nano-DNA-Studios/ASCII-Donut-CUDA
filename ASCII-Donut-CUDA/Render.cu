@@ -1,11 +1,6 @@
-#include "cuda_runtime.h"
-#include "device_launch_parameters.h"
-#include <iostream>
-#include <stdio.h>
-#include <math.h>
+#include "Render.cuh"
 #include <Windows.h>
 #include "Light.h"
-#include "Render.cuh"
 #include <math_functions.h>
 #include <device_atomic_functions.h>  // For atomic functions
 #include <device_functions.h>         // For device intrinsic functions
@@ -115,8 +110,6 @@ __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, flo
 	}
 }
 
-
-
 cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, float* zBuffer, int width, int height, Light* lightSource)
 {
 	float* kernel_A = 0;
@@ -141,21 +134,21 @@ cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float 
 	}
 
 	//Assign all the Variables and Copy to GPU memory
-	cudaStatus = AssignVariable(&kernel_A, &A);
-	cudaStatus = AssignVariable(&kernel_B, &B);
-	cudaStatus = AssignVariable(&kernel_R1, &R1);
-	cudaStatus = AssignVariable(&kernel_R2, &R2);
-	cudaStatus = AssignVariable(&kernel_XPos, &XPos);
-	cudaStatus = AssignVariable(&kernel_YPos, &YPos);
-	cudaStatus = AssignVariable(&kernel_width, &width);
-	cudaStatus = AssignVariable(&kernel_height, &height);
-
-	cudaStatus = AssignVariable(&kernel_theta, theta, thetaSize);
-	cudaStatus = AssignVariable(&kernel_phi, phi, phiSize);
-	cudaStatus = AssignVariable(&kernel_light, lightSource, 1);
-
-	cudaStatus = AssignVariable(&kernel_buffer, buffer, bufferSize);
-	cudaStatus = AssignVariable(&kernel_zBuffer, zBuffer, bufferSize);
+	cudaStatus = AssignVariable((void**)&kernel_A, &A, sizeof(float));
+	cudaStatus = AssignVariable((void**)&kernel_B, &B, sizeof(float));
+	cudaStatus = AssignVariable((void**)&kernel_R1, &R1, sizeof(float));
+	cudaStatus = AssignVariable((void**)&kernel_R2, &R2, sizeof(float));
+	cudaStatus = AssignVariable((void**)&kernel_XPos, &XPos, sizeof(float));
+	cudaStatus = AssignVariable((void**)&kernel_YPos, &YPos, sizeof(float));
+	cudaStatus = AssignVariable((void**)&kernel_width, &width, sizeof(int));
+	cudaStatus = AssignVariable((void**)&kernel_height, &height, sizeof(int));
+								
+	cudaStatus = AssignVariable((void**)&kernel_theta, theta, sizeof(float), thetaSize);
+	cudaStatus = AssignVariable((void**)&kernel_phi, phi, sizeof(float), phiSize);
+	cudaStatus = AssignVariable((void**)&kernel_light, lightSource, sizeof(Light), 1);
+								
+	cudaStatus = AssignVariable((void**)&kernel_buffer, buffer, sizeof(char), bufferSize);
+	cudaStatus = AssignVariable((void**)&kernel_zBuffer, zBuffer, sizeof(float), bufferSize);
 
 	render << <thetaSize, phiSize >> > (kernel_A, kernel_B, kernel_R1, kernel_R2, kernel_XPos, kernel_YPos, kernel_theta, kernel_phi, kernel_buffer, kernel_zBuffer, kernel_width, kernel_height, kernel_light);
 
