@@ -8,17 +8,23 @@
 
 cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, float* zBuffer, int width, int height, Light* lightSource);
 
-//Clamp function
-/*
-* Clamp function that is acceessible to the GPU
-*/
+/// <summary>
+/// Clamp function that is acceessible to the GPU
+/// </summary>
+/// <param name="n"> The Value to Clamp </param>
+/// <param name="lower"> The Lower bound to Clamp to </param>
+/// <param name="upper"> The Upper bound to Clamp to </param>
+/// <returns></returns>
 __device__ float clamp(float n, float lower, float upper) {
 	return max(lower, min(n, upper));
 }
 
-/*
-Function that performs a Float Atomix Max Operation (Determines Max Value accross all GPU threads)
-*/
+/// <summary>
+/// Function that performs a Float Atomix Max Operation (Determines Max Value accross all GPU threads)
+/// </summary>
+/// <param name="address"> Address of the Value to Compare </param>
+/// <param name="val"> The New Value to Compare at the address </param>
+/// <returns> True if the new Value is larger than the one at the address</returns>
 __device__ bool AtomicMaxFloat(float* address, float val)
 {
 	//Convert the float* to a int*, and dereference the value (Get the Value), create a empty variable
@@ -36,6 +42,23 @@ __device__ bool AtomicMaxFloat(float* address, float val)
 	return __int_as_float(old) < val;
 }
 
+/// <summary>
+/// Renders the Donut
+/// </summary>
+/// <param name="AVal"> The Rotation on the X Axis </param>
+/// <param name="BVal"> The Rotation on the Y Axis </param>
+/// <param name="R1Val"> The Radius of Donut ring </param>
+/// <param name="R2Val"> The Radius of the Donut </param>
+/// <param name="XPosVal"> The X position of the Donut </param>
+/// <param name="YPosVal"> The Y position of the Donut </param>
+/// <param name="theta"> The Angles for each point on the Donut Ring that will be rendered </param>
+/// <param name="phi"> The Angles for each point on the Donut that will be rendered </param>
+/// <param name="buffer"> The ASCII Buffer, array of characters that will be displayed to the screen </param>
+/// <param name="zBuffer"> The Z Values of the Buffer </param>
+/// <param name="width"> The Screen Width </param>
+/// <param name="height"> The Screen Height </param>
+/// <param name="light"> The Light Source for the Donut </param>
+/// <returns></returns>
 __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, float* XPosVal, float* YPosVal, float* theta, float* phi, char* buffer, float* zBuffer, int* width, int* height, Light* light)
 {
 	//Get the luminence values
