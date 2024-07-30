@@ -47,7 +47,7 @@ int main()
 			donut->B += 0.002f;
 
 			donut->XPos = sinf(counter) * 5;
-			donut->YPos = cosf(counter) * 2;
+			donut->YPos = cosf(counter);
 
 			counter += 0.01f;
 

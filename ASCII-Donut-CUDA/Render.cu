@@ -15,25 +15,32 @@ __device__ float clamp(float n, float lower, float upper) {
 // Helper function to perform atomicMax on floating point values in CUDA
 __device__ bool atomicMaxFloat(float* address, float val)
 {
+	//Convert the float* to a int*, and dereference the value (Get the Value), create a empty variable
 	int* address_as_int = (int*)address;
 	int old = *address_as_int;
 	int assumed;
+
+	//Do While loop, set Assumed to the last value, do a atomic compare to get the max value check on the newest value if it's changed, repeat while they aren't the same
 	do {
 		assumed = old;
 		old = atomicCAS(address_as_int, assumed, __float_as_int(fmaxf(val, __int_as_float(assumed))));
 	} while (assumed != old);
+
+	//Return true if the Value assigned is larger than the value in the pointer
 	return __int_as_float(old) < val;
 }
 
 __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, float* XPosVal, float* YPosVal, float* theta, float* phi, char* buffer, float* zBuffer, int* width, int* height, Light* light)
 {
+	//Get the luminence values
 	char _luminenceVals[12] = { '.', ',', '-', '~', ':',';', '=','!', '*', '#', '$', '@' };
-
 	int _luminenceValuesLength = 12;
 
+	//Get the theta and phi index
 	int thetaIndex = blockIdx.x;
 	int phiIndex = threadIdx.x;
 
+	//Dereference the Pointers
 	float A = *AVal;
 	float B = *BVal;
 	float R1 = *R1Val;
@@ -45,9 +52,11 @@ __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, flo
 
 	int sizeOfScreen = _width * _height;
 
+	//Get perspective values
 	float K2 = 10;
 	float K1 = _width * K2 * 3 / (24 * (R1 + R2));
 
+	//Get Cosine and Sin Caches
 	float cosA = cosf(A);
 	float sinA = sinf(A);
 	float cosB = cosf(B);
@@ -56,11 +65,11 @@ __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, flo
 	float cosTheta = cosf(theta[thetaIndex]);
 	float sinTheta = sinf(theta[thetaIndex]);
 
-	float circleX = R2 + R1 * cosTheta;
-	float circleY = R1 * sinTheta;
-
 	float cosPhi = cosf(phi[phiIndex]);
 	float sinPhi = sinf(phi[phiIndex]);
+
+	float circleX = R2 + R1 * cosTheta;
+	float circleY = R1 * sinTheta;
 
 	float x1 = cosB * cosPhi + sinB * sinA * sinPhi;
 	float x2 = cosA * sinB;
