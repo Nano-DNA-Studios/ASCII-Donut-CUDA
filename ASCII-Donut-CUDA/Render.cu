@@ -8,12 +8,18 @@
 
 cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, float* zBuffer, int width, int height, Light* lightSource);
 
+//Clamp function
+/*
+* Clamp function that is acceessible to the GPU
+*/
 __device__ float clamp(float n, float lower, float upper) {
 	return max(lower, min(n, upper));
 }
 
-// Helper function to perform atomicMax on floating point values in CUDA
-__device__ bool atomicMaxFloat(float* address, float val)
+/*
+Function that performs a Float Atomix Max Operation (Determines Max Value accross all GPU threads)
+*/
+__device__ bool AtomicMaxFloat(float* address, float val)
 {
 	//Convert the float* to a int*, and dereference the value (Get the Value), create a empty variable
 	int* address_as_int = (int*)address;
@@ -68,32 +74,41 @@ __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, flo
 	float cosPhi = cosf(phi[phiIndex]);
 	float sinPhi = sinf(phi[phiIndex]);
 
+	//Calculate the X and Y positions of the Torus Body (The Circle of the Donut Ring) (  ()---()  )
 	float circleX = R2 + R1 * cosTheta;
 	float circleY = R1 * sinTheta;
 
+	//Calculate the first and second Term of the X position
 	float x1 = cosB * cosPhi + sinB * sinA * sinPhi;
 	float x2 = cosA * sinB;
 
+	//Calculate the first and second Term of the Y Position
 	float y1 = sinB * cosPhi - cosB * sinA * sinPhi;
 	float y2 = cosA * cosB;
 
+	//Calculate first and second Term of the Z Position
 	float z1 = cosA * sinPhi;
 	float z2 = sinA;
 
+	//Calculate the X, Y, Z Positions
 	float x = XPos + circleX * x1 - circleY * x2;
 	float y = YPos + circleX * y1 + circleY * y2;
 	float z = K2 + circleX * z1 + circleY * z2;
 
+	//Calculate the inverse distance from the camera
 	float ooz = 1 / z;
 
+	//Get the x and y pixel positions for the point, clamp their values to within the screen
 	int xp = (int)(_width / 2 + K1 * ooz * x);
 	int yp = (int)(_height / 2 - K1 * ooz * y);
 
 	xp = clamp(xp, 0, _width - 1);
 	yp = clamp(yp, 0, _height - 1);
 
+	//Calculate th Pixel Index
 	int idx = xp + yp * _width;
 
+	//Calculate the Normal Vector to the Donut
 	float nx = cosTheta;
 	float ny = sinTheta;
 
@@ -101,26 +116,34 @@ __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, flo
 	float Ny = nx * y1 + ny * y2;
 	float Nz = nx * z1 + ny * z2;
 
+	//Get Magnitude and Normalize the Vector
 	float mag = sqrtf(Nx * Nx + Ny * Ny + Nz * Nz);
 
 	Nx = Nx / mag;
 	Ny = Ny / mag;
 	Nz = Nz / mag;
 
+	//Dot product of the Normal Vector and the Normalized Vector from 0 -> light position to determine how bright the point is
 	float Luminence = Nx * light->NormalizedX + Ny * light->NormalizedY + Nz * light->NormalizedZ;
 
-	if (atomicMaxFloat(&zBuffer[idx], ooz))
+	//Make atomic compare and determine if pixel is closest to the screen, so that we aren't writing a pixel that is blocked
+	if (AtomicMaxFloat(&zBuffer[idx], ooz))
 	{
-		Luminence = Nx * light->NormalizedX + Ny * light->NormalizedY + Nz * light->NormalizedZ;
+		//Get the character index from the list for the ASCII Pixel
 		int luminance_index = (int)((Luminence + 1) * (_luminenceValuesLength / 2) * light->GetIntensity(x, y, z));
 		luminance_index = clamp(luminance_index, 0, _luminenceValuesLength - 1);
 
+		//Write the Pixel to the screen
 		buffer[idx] = _luminenceVals[luminance_index];
 	}
 }
 
+/*
+ CUDA function for Rendering a Donut
+*/
 cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, float* zBuffer, int width, int height, Light* lightSource)
 {
+	//Initialize pointers
 	float* kernel_A = 0;
 	float* kernel_B = 0;
 	float* kernel_R1 = 0;
@@ -137,6 +160,7 @@ cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float 
 
 	cudaError_t cudaStatus;
 
+	//Get GPU
 	cudaStatus = cudaSetDevice(0);
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
@@ -159,6 +183,7 @@ cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float 
 	cudaStatus = AssignVariable((void**)&kernel_buffer, buffer, sizeof(char), bufferSize);
 	cudaStatus = AssignVariable((void**)&kernel_zBuffer, zBuffer, sizeof(float), bufferSize);
 
+	//Run the Render function
 	render << <thetaSize, phiSize >> > (kernel_A, kernel_B, kernel_R1, kernel_R2, kernel_XPos, kernel_YPos, kernel_theta, kernel_phi, kernel_buffer, kernel_zBuffer, kernel_width, kernel_height, kernel_light);
 
 	if (cudaStatus != cudaSuccess) {
@@ -166,6 +191,7 @@ cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float 
 		//goto Error;
 	}
 
+	//Wait for the Render function to finish
 	cudaStatus = cudaDeviceSynchronize();
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);

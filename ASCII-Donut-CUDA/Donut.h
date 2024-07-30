@@ -128,6 +128,9 @@ public:
 
 	}
 
+	/*
+	Draws the Donut to the Screen using the CPU
+	*/
 	void drawDonut()
 	{
 		int sizeOfScreen = _width * _height;
