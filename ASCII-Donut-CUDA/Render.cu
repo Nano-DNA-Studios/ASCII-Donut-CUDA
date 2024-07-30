@@ -59,7 +59,7 @@ __device__ bool AtomicMaxFloat(float* address, float val)
 /// <param name="height"> The Screen Height </param>
 /// <param name="light"> The Light Source for the Donut </param>
 /// <returns></returns>
-__global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, float* XPosVal, float* YPosVal, float* theta, float* phi, char* buffer, float* zBuffer, int* width, int* height, Light* light)
+__global__ void Render(float* AVal, float* BVal, float* R1Val, float* R2Val, float* XPosVal, float* YPosVal, float* theta, float* phi, char* buffer, float* zBuffer, int* width, int* height, Light* light)
 {
 	//Get the luminence values
 	char _luminenceVals[12] = { '.', ',', '-', '~', ':',';', '=','!', '*', '#', '$', '@' };
@@ -224,7 +224,7 @@ cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float 
 	cudaStatus = AssignVariable((void**)&kernel_zBuffer, zBuffer, sizeof(float), bufferSize);
 
 	//Run the Render function
-	render << <thetaSize, phiSize >> > (kernel_A, kernel_B, kernel_R1, kernel_R2, kernel_XPos, kernel_YPos, kernel_theta, kernel_phi, kernel_buffer, kernel_zBuffer, kernel_width, kernel_height, kernel_light);
+	Render << <thetaSize, phiSize >> > (kernel_A, kernel_B, kernel_R1, kernel_R2, kernel_XPos, kernel_YPos, kernel_theta, kernel_phi, kernel_buffer, kernel_zBuffer, kernel_width, kernel_height, kernel_light);
 
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "render launch failed: %s\n", cudaGetErrorString(cudaStatus));
