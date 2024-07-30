@@ -138,9 +138,26 @@ __global__ void render(float* AVal, float* BVal, float* R1Val, float* R2Val, flo
 	}
 }
 
-/*
- CUDA function for Rendering a Donut
-*/
+/// <summary>
+/// CUDA function for Rendering a Donut
+/// </summary>
+/// <param name="A"> The Rotation on the X Axis </param>
+/// <param name="B"> The Rotation on the Y Axis </param>
+/// <param name="R1"> The Radius of Donut ring </param>
+/// <param name="R2"> The Radius of the Donut </param>
+/// <param name="XPos"> The X position of the Donut </param>
+/// <param name="YPos"> The Y position of the Donut </param>
+/// <param name="theta"> The Angles for each point on the Donut Ring that will be rendered </param>
+/// <param name="phi"> The Angles for each point on the Donut that will be rendered </param>
+/// <param name="thetaSize"> The number of points that will be rendered on the donut ring </param>
+/// <param name="phiSize"> The number of points that will be rendered on the donut </param>
+/// <param name="buffer"> The ASCII Buffer, array of characters that will be displayed to the screen </param>
+/// <param name="bufferSize"> The Size of the Buffer </param>
+/// <param name="zBuffer"> The Z Values of the Buffer </param>
+/// <param name="width"> The Screen Width </param>
+/// <param name="height"> The Screen Height </param>
+/// <param name="lightSource"> The Light Source for the Donut </param>
+/// <returns> Returns the Results of CUDA Errors </returns>
 cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float YPos, float* theta, float* phi, int thetaSize, int phiSize, char* buffer, int bufferSize, float* zBuffer, int width, int height, Light* lightSource)
 {
 	//Initialize pointers
@@ -218,13 +235,3 @@ cudaError_t RenderDonut(float A, float B, float R1, float R2, float XPos, float 
 
 	return cudaStatus;
 }
-
-
-
-
-
-
-
-
-
-

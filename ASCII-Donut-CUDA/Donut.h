@@ -11,6 +11,9 @@
 #include <windows.h>
 #include <chrono>
 
+/// <summary>
+/// Represents a Donut Object to be Rendered in ASCII Format
+/// </summary>
 class Donut
 {
 #pragma region Properties
@@ -45,6 +48,12 @@ public:
 
 	Light* LightSource;
 
+	float* theta;
+
+	float* phi;
+
+	int points;
+
 private:
 
 	char _luminenceVals[12] = { '.', ',', '-', '~', ':',';', '=','!', '*', '#', '$', '@' };
@@ -67,6 +76,10 @@ private:
 
 public:
 
+	/// <summary>
+	/// Initializes a new Donut Object
+	/// </summary>
+	/// <param name="light"> The Light Source useed to light up the Donut </param>
 	Donut(Light* light) : LightSource(light)
 	{
 		getConsoleSize(_width, _height);
@@ -77,8 +90,24 @@ public:
 		_buf = new char[size];
 
 		K1 = _width * K2 * 3 / (24 * (R1 + R2));
+
+		points = 512;
+
+		theta = new float[points];
+		phi = new float[points];
+
+		for (int i = 0; i < points; i++)
+		{
+			theta[i] = i * 2 * pi / points;
+			phi[i] = i * 2 * pi / points;
+		}
 	}
 
+	/// <summary>
+	/// Gets the Size of the Console/Terminal
+	/// </summary>
+	/// <param name="columns"> Number of Columns in the Terminal </param>
+	/// <param name="rows"> Number of Rows in the Terminal </param>
 	void getConsoleSize(int& columns, int& rows) {
 		CONSOLE_SCREEN_BUFFER_INFO csbi;
 		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
@@ -86,24 +115,22 @@ public:
 		rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 	}
 
+	/// <summary>
+	/// Clamps a value between 2 Bounds
+	/// </summary>
+	/// <param name="n"> Value to Clamp </param>
+	/// <param name="lower"> The lower bound to clamp to </param>
+	/// <param name="upper"> The upper bound to clamp to </param>
+	/// <returns> Returns the Value Clamped to within the bounds </returns>
 	float clamp(float n, float lower, float upper) {
 		return max(lower, min(n, upper));
 	}
 
+	/// <summary>
+	/// Renders the Donut on the GPU
+	/// </summary>
 	void Render()
 	{
-		int points = 512;
-
-		float* theta = new float[points];
-
-		float* phi = new float[points];
-
-		for (int i = 0; i < points; i++)
-		{
-			theta[i] = i * 2 * pi / points;
-			phi[i] = i * 2 * pi / points;
-		}
-
 		int sizeOfScreen = _width * _height;
 
 		float* zBuffer = new float[sizeOfScreen];
@@ -122,15 +149,12 @@ public:
 
 		FastDisplay();
 
-		delete[] theta;
-		delete[] phi;
 		delete[] zBuffer;
-
 	}
 
-	/*
-	Draws the Donut to the Screen using the CPU
-	*/
+	/// <summary>
+	/// Draws the Donut to the Screen using the CPU
+	/// </summary>
 	void drawDonut()
 	{
 		int sizeOfScreen = _width * _height;
@@ -214,6 +238,9 @@ public:
 		delete[] zBuffer;
 	}
 
+	/// <summary>
+	/// A Fast version of the Display function to Display the Buffer to the Screen
+	/// </summary>
 	void FastDisplay()
 	{
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -258,6 +285,9 @@ public:
 		_lastWidth = _lastWidth;
 	}
 
+	/// <summary>
+	/// A Slow version of the Display function, centers the content to the middle of the Terminal as a tradeoff to speed
+	/// </summary>
 	void CenterDisplay()
 	{
 		// Get the console handle
@@ -293,4 +323,3 @@ public:
 		_lastWidth = _width;
 	}
 };
-
